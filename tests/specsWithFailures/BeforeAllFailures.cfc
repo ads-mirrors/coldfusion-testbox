@@ -11,7 +11,7 @@ component extends=testbox.system.BaseSpec {
             });
 
 			it("is another test", function() {
-                expect(true).toBeTrue()
+                expect(true).toBeTrue();
             });
         })
 
