@@ -33,7 +33,7 @@ component
 	 *
 	 * @target      The target bundle class to test
 	 * @testResults The test results object to keep track of results for this test case
-	 * @callbacks        A struct of listener callbacks or a class with callbacks for listening to progress of the testing: onBundleStart,onBundleEnd,onSuiteStart,onSuiteEnd,onSpecStart,onSpecEnd
+	 * @callbacks   A struct of listener callbacks or a class with callbacks for listening to progress of the testing: onBundleStart,onBundleEnd,onSuiteStart,onSuiteEnd,onSpecStart,onSpecEnd
 	 */
 	any function run(
 		required any target,
@@ -41,9 +41,11 @@ component
 		required callbacks
 	){
 		// Get target information
-		var targetMD   = getMetadata( arguments.target );
+		var targetMD          = getMetadata( arguments.target );
 		var targetAnnotations = targetMD.keyExists( "annotations" ) ? targetMD.annotations : targetMD;
-		var bundleName = ( structKeyExists( targetAnnotations, "displayName" ) ? targetAnnotations.displayname : targetMD.name );
+		var bundleName        = (
+			structKeyExists( targetAnnotations, "displayName" ) ? targetAnnotations.displayname : targetMD.name
+		);
 		var bundlePath = targetMD.name;
 
 
@@ -55,7 +57,7 @@ component
 		);
 		var testSuitesCount = arrayLen( testSuites );
 		// Start recording stats for this bundle
-		var bundleStats = arguments.testResults.startBundleStats( bundlePath = bundlePath, name = bundleName );
+		var bundleStats     = arguments.testResults.startBundleStats( bundlePath = bundlePath, name = bundleName );
 
 		// Verify we can run this bundle
 		if (
@@ -179,7 +181,7 @@ component
 	 * @method      The method definition to test
 	 * @testResults The testing results object
 	 * @bundleStats The bundle stats this suite belongs to
-	 * @callbacks        The class or struct of callback listener methods
+	 * @callbacks   The class or struct of callback listener methods
 	 */
 	private function testSuite(
 		required target,
@@ -388,7 +390,7 @@ component
 		required testResults
 	){
 		var annotations = targetMD.keyExists( "annotations" ) ? arguments.targetMD.annotations : arguments.targetMD;
-		var suite = {
+		var suite       = {
 			// ID
 			"id"   : hash( arguments.targetMD.name ),
 			// suite name
@@ -399,14 +401,10 @@ component
 			"asyncAll" : ( structKeyExists( annotations, "asyncAll" ) ? annotations.asyncAll : false ),
 			// skip suite testing flag
 			"skip"     : (
-				structKeyExists( annotations, "skip" ) ? (
-					len( annotations.skip ) ? annotations.skip : true
-				) : false
+				structKeyExists( annotations, "skip" ) ? ( len( annotations.skip ) ? annotations.skip : true ) : false
 			),
 			// labels attached to the suite for execution
-			"labels" : (
-				structKeyExists( annotations, "labels" ) ? listToArray( annotations.labels ) : []
-			),
+			"labels" : ( structKeyExists( annotations, "labels" ) ? listToArray( annotations.labels ) : [] ),
 			// the specs attached to this suite.
 			"specs"  : getTestMethods( arguments.target, arguments.testResults ),
 			// nested suites
