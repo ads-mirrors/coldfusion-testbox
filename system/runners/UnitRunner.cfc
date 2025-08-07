@@ -76,7 +76,7 @@ component
 				// find any methods annotated 'beforeAll' and execute them
 				var beforeAllAnnotationMethods = variables.testbox
 					.getUtility()
-					.getAnnotatedMethods( annotation = "beforeAll", metadata = getMetadata( arguments.target ) );
+					.getAnnotatedMethods( annotation = "beforeAll", metadata = targetMD );
 
 				for ( var beforeAllMethod in beforeAllAnnotationMethods ) {
 					invoke( arguments.target, "#beforeAllMethod.name#" );
@@ -143,7 +143,7 @@ component
 				// find any methods annotated 'afterAll' and execute them
 				var afterAllAnnotationMethods = variables.testbox
 					.getUtility()
-					.getAnnotatedMethods( annotation = "afterAll", metadata = getMetadata( arguments.target ) );
+					.getAnnotatedMethods( annotation = "afterAll", metadata = targetMD );
 
 				for ( var afterAllMethod in afterAllAnnotationMethods ) {
 					invoke( arguments.target, "#afterAllMethod.name#" );
