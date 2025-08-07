@@ -41,9 +41,11 @@ component
 		required callbacks
 	){
 		// Get target metadata
-		var targetMD   = getMetadata( arguments.target );
+		var targetMD          = getMetadata( arguments.target );
 		var tartetAnnotations = targetMD.keyExists( "annotations" ) ? targetMD.annotations : targetMD;
-		var bundleName = ( structKeyExists( tartetAnnotations, "displayName" ) ? tartetAnnotations.displayname : targetMD.name );
+		var bundleName        = (
+			structKeyExists( tartetAnnotations, "displayName" ) ? tartetAnnotations.displayname : targetMD.name
+		);
 
 		// Execute the suite descriptors
 		arguments.target.run( testResults = arguments.testResults, testbox = variables.testbox );
