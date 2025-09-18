@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.4.0] - 2025-09-18
+
 ### New Features
 
 - [TESTBOX-423](https://ortussolutions.atlassian.net/browse/TESTBOX-423) BoxLang Prime Updates
@@ -102,7 +104,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - TESTBOX-400 Drop Adobe 2018 support
 
-[Unreleased]: https://github.com/Ortus-Solutions/TestBox/compare/v6.3.2...HEAD
+[Unreleased]: https://github.com/Ortus-Solutions/TestBox/compare/v6.4.0...HEAD
+
+[6.4.0]: https://github.com/Ortus-Solutions/TestBox/compare/v6.3.2...v6.4.0
 
 [6.3.2]: https://github.com/Ortus-Solutions/TestBox/compare/v6.3.1...v6.3.2
 
