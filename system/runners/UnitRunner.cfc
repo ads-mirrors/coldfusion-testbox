@@ -18,8 +18,8 @@ component
 	/**
 	 * Constructor
 	 *
-	 * @options.hint The options for this runner
-	 * @testbox.hint The TestBox class reference
+	 * @options The options for this runner
+	 * @testbox The TestBox class reference
 	 */
 	function init( required struct options, required testBox ){
 		variables.options = arguments.options;
@@ -31,9 +31,9 @@ component
 	/**
 	 * Execute a BDD test on the incoming target and store the results in the incoming test results
 	 *
-	 * @target.hint      The target bundle class to test
-	 * @testResults.hint The test results object to keep track of results for this test case
-	 * @callbacks        A struct of listener callbacks or a class with callbacks for listening to progress of the testing: onBundleStart,onBundleEnd,onSuiteStart,onSuiteEnd,onSpecStart,onSpecEnd
+	 * @target      The target bundle class to test
+	 * @testResults The test results object to keep track of results for this test case
+	 * @callbacks   A struct of listener callbacks or a class with callbacks for listening to progress of the testing: onBundleStart,onBundleEnd,onSuiteStart,onSuiteEnd,onSpecStart,onSpecEnd
 	 */
 	any function run(
 		required any target,
@@ -41,8 +41,13 @@ component
 		required callbacks
 	){
 		// Get target information
-		var targetMD   = getMetadata( arguments.target );
-		var bundleName = ( structKeyExists( targetMD, "displayName" ) ? targetMD.displayname : targetMD.name );
+		var targetMD          = getMetadata( arguments.target );
+		var targetAnnotations = targetMD.keyExists( "annotations" ) ? targetMD.annotations : targetMD;
+		var bundleName        = (
+			structKeyExists( targetAnnotations, "displayName" ) ? targetAnnotations.displayname : targetMD.name
+		);
+		var bundlePath = targetMD.name;
+
 
 		// Discover the test suite data to use for testing
 		var testSuites = getTestSuites(
@@ -51,14 +56,13 @@ component
 			arguments.testResults
 		);
 		var testSuitesCount = arrayLen( testSuites );
-
 		// Start recording stats for this bundle
-		var bundleStats = arguments.testResults.startBundleStats( bundlePath = targetMD.name, name = bundleName );
+		var bundleStats     = arguments.testResults.startBundleStats( bundlePath = bundlePath, name = bundleName );
 
 		// Verify we can run this bundle
 		if (
 			canRunBundle(
-				bundlePath  = targetMD.name,
+				bundlePath  = bundlePath,
 				testResults = arguments.testResults,
 				targetMD    = targetMD
 			)
@@ -72,7 +76,7 @@ component
 				// find any methods annotated 'beforeAll' and execute them
 				var beforeAllAnnotationMethods = variables.testbox
 					.getUtility()
-					.getAnnotatedMethods( annotation = "beforeAll", metadata = getMetadata( arguments.target ) );
+					.getAnnotatedMethods( annotation = "beforeAll", metadata = targetMD );
 
 				for ( var beforeAllMethod in beforeAllAnnotationMethods ) {
 					invoke( arguments.target, "#beforeAllMethod.name#" );
@@ -139,7 +143,7 @@ component
 				// find any methods annotated 'afterAll' and execute them
 				var afterAllAnnotationMethods = variables.testbox
 					.getUtility()
-					.getAnnotatedMethods( annotation = "afterAll", metadata = getMetadata( arguments.target ) );
+					.getAnnotatedMethods( annotation = "afterAll", metadata = targetMD );
 
 				for ( var afterAllMethod in afterAllAnnotationMethods ) {
 					invoke( arguments.target, "#afterAllMethod.name#" );
@@ -173,11 +177,11 @@ component
 	/**
 	 * Test the incoming suite definition
 	 *
-	 * @target.hint      The target bundle class
-	 * @method.hint      The method definition to test
-	 * @testResults.hint The testing results object
-	 * @bundleStats.hint The bundle stats this suite belongs to
-	 * @callbacks        The class or struct of callback listener methods
+	 * @target      The target bundle class
+	 * @method      The method definition to test
+	 * @testResults The testing results object
+	 * @bundleStats The bundle stats this suite belongs to
+	 * @callbacks   The class or struct of callback listener methods
 	 */
 	private function testSuite(
 		required target,
@@ -376,34 +380,31 @@ component
 	/**
 	 * Get all the test suites in the passed in bundle
 	 *
-	 * @target.hint      The target to get the suites from
-	 * @targetMD.hint    The metadata of the target
-	 * @testResults.hint The test results object
+	 * @target      The target to get the suites from
+	 * @targetMD    The metadata of the target
+	 * @testResults The test results object
 	 */
 	private array function getTestSuites(
 		required target,
 		required targetMD,
 		required testResults
 	){
-		var suite = {
+		var annotations = targetMD.keyExists( "annotations" ) ? arguments.targetMD.annotations : arguments.targetMD;
+		var suite       = {
 			// ID
 			"id"   : hash( arguments.targetMD.name ),
 			// suite name
 			"name" : (
-				structKeyExists( arguments.targetMD, "displayName" ) ? arguments.targetMD.displayname : arguments.targetMD.name
+				structKeyExists( annotations, "displayName" ) ? annotations.displayname : arguments.targetMD.name
 			),
 			// async flag
-			"asyncAll" : ( structKeyExists( arguments.targetMD, "asyncAll" ) ? arguments.targetMD.asyncAll : false ),
+			"asyncAll" : ( structKeyExists( annotations, "asyncAll" ) ? annotations.asyncAll : false ),
 			// skip suite testing flag
 			"skip"     : (
-				structKeyExists( arguments.targetMD, "skip" ) ? (
-					len( arguments.targetMD.skip ) ? arguments.targetMD.skip : true
-				) : false
+				structKeyExists( annotations, "skip" ) ? ( len( annotations.skip ) ? annotations.skip : true ) : false
 			),
 			// labels attached to the suite for execution
-			"labels" : (
-				structKeyExists( arguments.targetMD, "labels" ) ? listToArray( arguments.targetMD.labels ) : []
-			),
+			"labels" : ( structKeyExists( annotations, "labels" ) ? listToArray( annotations.labels ) : [] ),
 			// the specs attached to this suite.
 			"specs"  : getTestMethods( arguments.target, arguments.testResults ),
 			// nested suites
@@ -457,7 +458,7 @@ component
 					"displayName" : (
 						structKeyExists( specAnnotations, "displayName" ) ? specAnnotations.displayName : specMD.name
 					),
-					"hint" : ( structKeyExists( specDocumentation, "hint" ) ? specDocumentation.hint : "" ),
+					"hint" : ( structKeyExists( specDocumentation, "hint" ) ? specDocumentation : "" ),
 					"skip" : (
 						structKeyExists( specAnnotations, "skip" ) ? (
 							len( specAnnotations.skip ) ? specAnnotations.skip : true

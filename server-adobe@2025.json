@@ -1,18 +1,19 @@
 {
-    "name":"testbox-adobe@2021",
+    "app":{
+        "cfengine":"adobe@2025",
+        "serverHomeDirectory":".engine/adobe2025"
+    },
+    "name":"testbox-adobe@2025",
     "force":true,
-    "openbrowser":"false",
+    "openBrowser":false,
     "web":{
         "directoryBrowsing":true,
         "http":{
             "port":"49616"
         }
     },
-    "app":{
-        "cfengine":"adobe@2021",
-        "serverHomeDirectory":".engine/adobe2021"
-    },
     "JVM":{
+        "javaVersion":"openjdk21_jre",
         "args":"-Dcoldfusion.runtime.remotemethod.matchArguments=false"
     },
     "cfconfig":{

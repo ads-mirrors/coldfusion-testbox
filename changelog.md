@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### New Features
+
+- [TESTBOX-423](https://ortussolutions.atlassian.net/browse/TESTBOX-423) BoxLang Prime Updates
+
+### Bugs
+
+- [TESTBOX-421](https://ortussolutions.atlassian.net/browse/TESTBOX-421) \`equalize\` should use the Java \`equals\` check at the end of the function instead of \`false\`
+
+### Tasks
+
+- [TESTBOX-424](https://ortussolutions.atlassian.net/browse/TESTBOX-424) Add Dumb Adobe jvm flags to allow for dynamic arguments
+
 ## [6.3.2] - 2025-04-29
 
 ## [6.3.1] - 2025-04-01
