@@ -41,8 +41,7 @@
         "globber":"^3.1.3"
     },
     "devDependencies":{
-        "commandbox-dotenv":"*",
-        "commandbox-cfconfig":"*",
+		"commandbox-boxlang":"*",
         "commandbox-cfformat":"*"
     },
     "installPaths":{
@@ -56,10 +55,10 @@
         "format:check":"cfformat check system/**/*.cfc,test-harness/**/*.cfc,tests/specs/**/*.cfc ./.cfformat.json",
         "format:watch":"cfformat watch system/**/*.cfc,test-harness/**/*.cfc,tests/specs/**/*.cfc ./.cfformat.json",
         "start:lucee":"server start serverConfigFile=server-lucee@5.json",
-        "start:2021":"server start serverConfigFile=server-adobe@2021.json",
-        "start:2023":"server start serverConfigFile=server-adobe@2023.json",
+        "start:adobe":"server start serverConfigFile=server-adobe@2025.json",
+        "start:boxlang":"server start serverConfigFile=server-boxlang@1.json",
         "log:lucee":"server log testbox-lucee@5 --follow",
-        "log:2021":"server log testbox-adobe@2021 --follow",
-        "log:2023":"server log testbox-adobe@2023 --follow"
+        "log:adobe":"server log testbox-adobe@2025 --follow",
+        "log:boxlang":"server log testbox-boxlang@1 --follow"
     }
 }
